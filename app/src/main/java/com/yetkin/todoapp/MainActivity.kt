@@ -1,6 +1,9 @@
 package com.yetkin.todoapp
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yetkin.todoapp.adapter.MonthDayAdapter
@@ -21,6 +24,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(mainBinding.root)
 
+        val backPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(Intent.ACTION_MAIN)
+                intent.addCategory(Intent.CATEGORY_HOME)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+        }
+        onBackPressedDispatcher.addCallback(backPressedCallback)
+
         val list = printDate(2020, 8)
 
         monthDayAdapter = MonthDayAdapter(list)
@@ -30,7 +43,16 @@ class MainActivity : AppCompatActivity() {
                 LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
             recyclerViewDays.adapter = monthDayAdapter
 
+            floatingActionButton.setOnClickListener {
+                startActivityForResult(Intent(this@MainActivity, TodoAddActivity::class.java), 1)
+            }
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        Log.e("onActivityResult", "HERE")
     }
 
     private fun printDate(year: Int, month: Int): ArrayList<MonthDayModel> {

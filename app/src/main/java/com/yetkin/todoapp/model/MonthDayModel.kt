@@ -1,6 +1,5 @@
 package com.yetkin.todoapp.model
 
-
 /**
 
 Created by : Buğra Yetkin

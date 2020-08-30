@@ -36,7 +36,6 @@ class MonthDayAdapter(private val list: ArrayList<MonthDayModel>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonthDayHolder =
         MonthDayHolder(DaysBinding.inflate(LayoutInflater.from(parent.context)))
 
-
     override fun onBindViewHolder(holder: MonthDayHolder, position: Int) {
 
         holder.bind(list[position])
@@ -60,6 +59,4 @@ class MonthDayAdapter(private val list: ArrayList<MonthDayModel>) :
 
 
     override fun getItemCount(): Int = list.size
-
-
 }
