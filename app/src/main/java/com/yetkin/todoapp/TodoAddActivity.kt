@@ -1,5 +1,6 @@
 package com.yetkin.todoapp
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -19,7 +20,9 @@ class TodoAddActivity : AppCompatActivity() {
     private val todoAddActivityBinding: ActivityTodoAddBinding by lazy {
         ActivityTodoAddBinding.inflate(layoutInflater)
     }
+    private var priortiy = -1
 
+    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(todoAddActivityBinding.root)
@@ -42,6 +45,26 @@ class TodoAddActivity : AppCompatActivity() {
             showTimeDialog(calendar)
         }
 
+        radioGroupCheckbox.setOnCheckedChangeListener { _, checkedId ->
+
+            var color = 0
+
+            when (checkedId) {
+                R.id.checkBoxBlue -> {
+                    priortiy = 1
+                    color = resources.getColor(R.color.colorBlue)
+                }
+                R.id.checkBoxGreen -> {
+                    priortiy = 2
+                    color = resources.getColor(R.color.colorGreen)
+                }
+                R.id.checkBoxRed -> {
+                    priortiy = 3
+                    color = resources.getColor(R.color.colorRed)
+                }
+            }
+            toolbar2.setBackgroundColor(color)
+        }
         buttonSave.setOnClickListener {
             val intent = Intent()
 
@@ -54,6 +77,7 @@ class TodoAddActivity : AppCompatActivity() {
                 || TextUtils.isEmpty(message)
                 || TextUtils.isEmpty(datePicker)
                 || TextUtils.isEmpty(timePicker)
+                || priortiy == -1
 
             ) {
                 Toast.makeText(this, "Boş alanları doldurun lütfen !", Toast.LENGTH_LONG).show()
@@ -64,7 +88,7 @@ class TodoAddActivity : AppCompatActivity() {
                     message = message,
                     date = datePicker,
                     time = timePicker,
-                    priority = 1
+                    priority = priortiy
                 )
                 val bundle = Bundle()
                 bundle.putSerializable("todoModel", todoModel)

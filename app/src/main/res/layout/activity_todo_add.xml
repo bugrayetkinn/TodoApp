@@ -99,7 +99,7 @@
         android:id="@+id/buttonSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="130dp"
+        android:layout_marginBottom="100dp"
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -139,5 +139,43 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txtTime"
         app:layout_constraintTop_toBottomOf="@+id/txtDatePicker" />
+
+
+    <RadioGroup
+        android:id="@+id/radioGroupCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="26dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@+id/txtPriority"
+        app:layout_constraintTop_toBottomOf="@+id/txtTimePicker">
+
+        <RadioButton
+            android:id="@+id/checkBoxBlue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:button="@drawable/blue_checkbox" />
+
+        <RadioButton
+            android:id="@+id/checkBoxGreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:button="@drawable/green_checkbox"
+            app:layout_constraintStart_toEndOf="@+id/checkBoxBlue"
+            app:layout_constraintTop_toBottomOf="@+id/txtTimePicker" />
+
+        <RadioButton
+            android:id="@+id/checkBoxRed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:button="@drawable/red_checkbox"
+            app:layout_constraintStart_toEndOf="@+id/checkBoxGreen"
+            app:layout_constraintTop_toBottomOf="@+id/txtTimePicker" />
+
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

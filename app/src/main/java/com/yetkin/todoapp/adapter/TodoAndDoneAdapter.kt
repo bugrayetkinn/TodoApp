@@ -2,9 +2,11 @@ package com.yetkin.todoapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.yetkin.todoapp.R
 import com.yetkin.todoapp.data.local.TodoModel
 import com.yetkin.todoapp.databinding.TodoAndDoneBinding
 
@@ -22,9 +24,33 @@ class TodoAndDoneAdapter(private val setOnCheckBoxClickListener: (TodoModel) -> 
         RecyclerView.ViewHolder(todoAndDoneBinding.root) {
 
         fun bind(todoModel: TodoModel, setOnCheckBoxClickListener: (TodoModel) -> Unit) {
+
+            val context = itemView.context
+
             todoAndDoneBinding.apply {
                 txtViewHour.text = todoModel.time
                 txtTitle.text = todoModel.title
+
+                when (todoModel.priority) {
+                    1 -> divider.setBackgroundColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.colorBlue
+                        )
+                    )
+                    2 -> divider.setBackgroundColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.colorGreen
+                        )
+                    )
+                    3 -> divider.setBackgroundColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.colorRed
+                        )
+                    )
+                }
 
                 when (todoModel.checkDone) {
                     0 -> {
