@@ -90,7 +90,7 @@
         android:layout_marginBottom="32dp"
         android:clickable="true"
         android:focusable="true"
-        app:backgroundTint="#ef5350"
+        app:backgroundTint="@color/colorPink"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

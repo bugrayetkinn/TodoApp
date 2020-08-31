@@ -51,6 +51,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    // Recyclerview swipe
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
+
     // Coroutine
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_android_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_android_version"

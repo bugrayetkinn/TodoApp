@@ -16,7 +16,7 @@ Mail : bugrayetkinn@gmail.com
 
  */
 class TodoAndDoneAdapter :
-    ListAdapter<TodoModel, TodoAndDoneAdapter.TodoAndDoneHolder>(DiffUtilCalback()) {
+    ListAdapter<TodoModel, TodoAndDoneAdapter.TodoAndDoneHolder>(DiffUtilCallback()) {
 
     class TodoAndDoneHolder(private val todoAndDoneBinding: TodoAndDoneBinding) :
         RecyclerView.ViewHolder(todoAndDoneBinding.root) {
@@ -35,12 +35,18 @@ class TodoAndDoneAdapter :
     override fun onBindViewHolder(holder: TodoAndDoneHolder, position: Int) =
         holder.bind(getItem(position))
 
-    class DiffUtilCalback : DiffUtil.ItemCallback<TodoModel>() {
+    class DiffUtilCallback : DiffUtil.ItemCallback<TodoModel>() {
         override fun areItemsTheSame(oldItem: TodoModel, newItem: TodoModel): Boolean =
             oldItem.message == newItem.message
 
         override fun areContentsTheSame(oldItem: TodoModel, newItem: TodoModel): Boolean =
             oldItem == newItem
+    }
 
+    fun removeItem(position: Int): TodoModel {
+        val item: TodoModel = currentList[position]
+        notifyItemRemoved(position)
+        notifyDataSetChanged()
+        return item
     }
 }
