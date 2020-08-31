@@ -1,10 +1,14 @@
 package com.yetkin.todoapp
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.yetkin.todoapp.data.local.TodoModel
 import com.yetkin.todoapp.databinding.ActivityTodoAddBinding
 import kotlinx.android.synthetic.main.activity_todo_add.*
 import java.text.SimpleDateFormat
@@ -38,6 +42,37 @@ class TodoAddActivity : AppCompatActivity() {
             showTimeDialog(calendar)
         }
 
+        buttonSave.setOnClickListener {
+            val intent = Intent()
+
+            val title = editTxtTitle.text.toString()
+            val message = editTxtMessage.text.toString()
+            val datePicker = txtDatePicker.text.toString()
+            val timePicker = txtTimePicker.text.toString()
+
+            if (TextUtils.isEmpty(title)
+                || TextUtils.isEmpty(message)
+                || TextUtils.isEmpty(datePicker)
+                || TextUtils.isEmpty(timePicker)
+
+            ) {
+                Toast.makeText(this, "Boş alanları doldurun lütfen !", Toast.LENGTH_LONG).show()
+            } else {
+
+                val todoModel = TodoModel(
+                    title = title,
+                    message = message,
+                    date = datePicker,
+                    time = timePicker,
+                    priority = 1
+                )
+                val bundle = Bundle()
+                bundle.putSerializable("todoModel", todoModel)
+                intent.putExtra("bundle", bundle)
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
+        }
     }
 
     private fun showTimeDialog(calendar: Calendar) {

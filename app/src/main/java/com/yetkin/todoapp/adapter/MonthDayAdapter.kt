@@ -18,7 +18,10 @@ Mail : bugrayetkinn@gmail.com
 
  */
 
-class MonthDayAdapter(private val list: ArrayList<MonthDayModel>) :
+class MonthDayAdapter(
+    private val list: ArrayList<MonthDayModel>,
+    private val setOnItemClickListener: (MonthDayModel) -> Unit
+) :
     RecyclerView.Adapter<MonthDayAdapter.MonthDayHolder>() {
 
     private var index = -1
@@ -26,7 +29,10 @@ class MonthDayAdapter(private val list: ArrayList<MonthDayModel>) :
     class MonthDayHolder(private val daysBinding: DaysBinding) :
         RecyclerView.ViewHolder(daysBinding.root) {
 
-        fun bind(monthDayModel: MonthDayModel) {
+        fun bind(
+            monthDayModel: MonthDayModel
+
+        ) {
             daysBinding.apply {
                 textView.text = monthDayModel.dayNameNumber
             }
@@ -38,13 +44,15 @@ class MonthDayAdapter(private val list: ArrayList<MonthDayModel>) :
 
     override fun onBindViewHolder(holder: MonthDayHolder, position: Int) {
 
-        holder.bind(list[position])
+        val item = list[position]
+        holder.bind(item)
 
         /**
          * Change backgrouncolor click item
          */
         holder.itemView.setOnClickListener {
             index = position
+            setOnItemClickListener(item)
             notifyDataSetChanged()
         }
 
