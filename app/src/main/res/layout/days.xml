@@ -14,8 +14,7 @@
             android:id="@+id/textView"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:gravity="center"
-            android:text="TextView" />
+            android:gravity="center" />
 
     </LinearLayout>
 

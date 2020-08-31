@@ -98,13 +98,13 @@ class MainActivity : AppCompatActivity() {
          * TODO
          * change date click recycleritem(Day recycler)
          */
-        todoViewModel.getTodo("31/08/2020").observe(this, Observer { list ->
+        todoViewModel.getTodo("01/09/2020").observe(this, Observer { list ->
 
             todoAdapter.submitList(list)
             txtTodo.text = "TO DO (${list.size})"
         })
 
-        todoViewModel.getDone("31/08/2020").observe(this, Observer { list ->
+        todoViewModel.getDone("01/09/2020").observe(this, Observer { list ->
             doneAdapter.submitList(list)
             txtDone.text = "DONE (${list.size})"
         })
@@ -210,7 +210,7 @@ class MainActivity : AppCompatActivity() {
         val calendar = Calendar.getInstance()
         val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
         val simpleDateFormatDayName = SimpleDateFormat("EEEE")
-        val simpleDataFormmatDayNumber = SimpleDateFormat("dd")
+        val simpleDataFormatDayNumber = SimpleDateFormat("dd")
         val dayList = ArrayList<MonthDayModel>()
 
 
@@ -219,7 +219,7 @@ class MainActivity : AppCompatActivity() {
         for (i in 0..daysInMonth) {
 
             val dayName = simpleDateFormatDayName.format(calendar.time)
-            val dayNumber = simpleDataFormmatDayNumber.format(calendar.time)
+            val dayNumber = simpleDataFormatDayNumber.format(calendar.time)
             val result = dayNumber + "\n" + dayName
             val date = simpleDateFormat.format(calendar.time)
 
