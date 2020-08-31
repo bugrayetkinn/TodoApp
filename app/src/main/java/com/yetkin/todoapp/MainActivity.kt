@@ -2,10 +2,8 @@ package com.yetkin.todoapp
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.OnBackPressedCallback
@@ -35,32 +33,14 @@ class MainActivity : AppCompatActivity() {
     }
     private val todoViewModel: TodoViewModel by viewModel()
     private lateinit var monthDayAdapter: MonthDayAdapter
-    private lateinit var todoAndDoneAdapter: TodoAndDoneAdapter
+    private lateinit var todoAdapter: TodoAndDoneAdapter
+    private lateinit var doneAdapter: TodoAndDoneAdapter
     private var listSize: Int = 0
-    private lateinit var deleteIcon: Drawable
-    private lateinit var iconBitmap: Bitmap
-
-
-    private fun drawableToBitmap(drawable: Drawable): Bitmap {
-
-        val bitmap: Bitmap = Bitmap.createBitmap(
-            drawable.intrinsicWidth,
-            drawable.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
-        )
-
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-        return bitmap
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(mainBinding.root)
 
-        deleteIcon = ContextCompat.getDrawable(this, R.drawable.delete)!!
-        iconBitmap = drawableToBitmap(deleteIcon)
         val backPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val intent = Intent(Intent.ACTION_MAIN)
@@ -78,7 +58,8 @@ class MainActivity : AppCompatActivity() {
         val list = printDate(2020, 8)
 
         monthDayAdapter = MonthDayAdapter(list, setOnItemClickListener)
-        todoAndDoneAdapter = TodoAndDoneAdapter()
+        todoAdapter = TodoAndDoneAdapter(setOnCheckBoxClickListener)
+        doneAdapter = TodoAndDoneAdapter(setOnCheckBoxClickListener)
 
         mainBinding.apply {
 
@@ -89,13 +70,23 @@ class MainActivity : AppCompatActivity() {
 
             /**********************************************************************************/
 
-            listSize = todoAndDoneAdapter.currentList.size
-            recyclerViewTodo.setHasFixedSize(true)
-            recyclerViewTodo.layoutManager =
+            val layoutManager =
                 LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
-            recyclerViewTodo.adapter = todoAndDoneAdapter
+            listSize = todoAdapter.currentList.size
+            recyclerViewTodo.setHasFixedSize(true)
+            recyclerViewTodo.layoutManager = layoutManager
+            recyclerViewTodo.adapter = todoAdapter
             val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
             itemTouchHelper.attachToRecyclerView(recyclerViewTodo)
+
+            /**********************************************************************************/
+
+            recyclerViewDone.setHasFixedSize(true)
+            recyclerViewDone.layoutManager =
+                LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
+            recyclerViewDone.adapter = doneAdapter
+
+            /**********************************************************************************/
 
 
             floatingActionButton.setOnClickListener {
@@ -109,10 +100,28 @@ class MainActivity : AppCompatActivity() {
          */
         todoViewModel.getTodo("31/08/2020").observe(this, Observer { list ->
 
-            Log.e("Observe : ", "HERE")
-            todoAndDoneAdapter.submitList(list)
+            todoAdapter.submitList(list)
             txtTodo.text = "TO DO (${list.size})"
         })
+
+        todoViewModel.getDone("31/08/2020").observe(this, Observer { list ->
+            doneAdapter.submitList(list)
+            txtDone.text = "DONE (${list.size})"
+        })
+    }
+
+    private val setOnCheckBoxClickListener: (TodoModel) -> Unit = { todoModel ->
+
+        var todoModelNew = todoModel.copy()
+        when (todoModel.checkDone) {
+            0 -> {
+                todoModelNew = todoModel.copy(checkDone = 1)
+            }
+            1 -> {
+                todoModelNew = todoModel.copy(checkDone = 0)
+            }
+        }
+        todoViewModel.update(todoModelNew)
     }
 
     private val itemTouchHelperCallback =
@@ -129,7 +138,7 @@ class MainActivity : AppCompatActivity() {
 
                 Log.e("OnSwiped : ", "HERE")
                 val position = viewHolder.adapterPosition
-                val todoModel = todoAndDoneAdapter.removeItem(position)
+                val todoModel = todoAdapter.removeItem(position)
                 todoViewModel.delete(todoModel)
             }
 

@@ -15,16 +15,28 @@ Created by : Buğra Yetkin
 Mail : bugrayetkinn@gmail.com
 
  */
-class TodoAndDoneAdapter :
+class TodoAndDoneAdapter(private val setOnCheckBoxClickListener: (TodoModel) -> Unit) :
     ListAdapter<TodoModel, TodoAndDoneAdapter.TodoAndDoneHolder>(DiffUtilCallback()) {
 
     class TodoAndDoneHolder(private val todoAndDoneBinding: TodoAndDoneBinding) :
         RecyclerView.ViewHolder(todoAndDoneBinding.root) {
 
-        fun bind(todoModel: TodoModel) {
+        fun bind(todoModel: TodoModel, setOnCheckBoxClickListener: (TodoModel) -> Unit) {
             todoAndDoneBinding.apply {
                 txtViewHour.text = todoModel.time
                 txtTitle.text = todoModel.title
+
+                when (todoModel.checkDone) {
+                    0 -> {
+                        checkBox.isChecked = false
+                    }
+                    1 -> {
+                        checkBox.isChecked = true
+                    }
+                }
+                checkBox.setOnClickListener {
+                    setOnCheckBoxClickListener(todoModel)
+                }
             }
         }
     }
@@ -33,7 +45,7 @@ class TodoAndDoneAdapter :
         TodoAndDoneHolder(TodoAndDoneBinding.inflate(LayoutInflater.from(parent.context)))
 
     override fun onBindViewHolder(holder: TodoAndDoneHolder, position: Int) =
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), setOnCheckBoxClickListener)
 
     class DiffUtilCallback : DiffUtil.ItemCallback<TodoModel>() {
         override fun areItemsTheSame(oldItem: TodoModel, newItem: TodoModel): Boolean =

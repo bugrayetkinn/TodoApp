@@ -18,5 +18,5 @@ class TodoRepository(private val todoDAO: TodoDAO) {
     suspend fun delete(todoModel: TodoModel) = todoDAO.delete(todoModel)
     suspend fun update(todoModel: TodoModel) = todoDAO.update(todoModel)
     fun getTodo(date: String) = todoDAO.getTodo(date)
-    fun getDone(date: String) = todoDAO.getTodo(date)
+    fun getDone(date: String) = todoDAO.getDone(date)
 }
