@@ -1,12 +1,11 @@
 <resources>
     <string name="app_name">TodoApp</string>
     <string name="add_new_task">ADD NEW TASK</string>
+    <string name="update">UPDATE</string>
     <string name="title">Title</string>
     <string name="message">Message</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="save">Save</string>
     <string name="priority">Priority</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -10,4 +10,6 @@
     <color name="colorBlue">#00bcd4</color>
     <color name="colorGreen">#4caf50</color>
     <color name="colorRed">#ff3d00</color>
+    <color name="colorPurple">#7e57c2</color>
+    <color name="colorYellow">#fdd835</color>
 </resources>

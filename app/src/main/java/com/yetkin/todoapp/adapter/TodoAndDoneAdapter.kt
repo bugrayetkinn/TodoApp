@@ -18,13 +18,20 @@ Mail : bugrayetkinn@gmail.com
 
  */
 
-class TodoAndDoneAdapter(private val setOnCheckBoxClickListener: (TodoModel) -> Unit) :
+class TodoAndDoneAdapter(
+    private val setOnCheckBoxClickListener: (TodoModel) -> Unit,
+    private val setOnItemClickListener: (TodoModel) -> Unit
+) :
     ListAdapter<TodoModel, TodoAndDoneAdapter.TodoAndDoneHolder>(DiffUtilCallback()) {
 
     class TodoAndDoneHolder(private val todoAndDoneBinding: TodoAndDoneBinding) :
         RecyclerView.ViewHolder(todoAndDoneBinding.root) {
 
-        fun bind(todoModel: TodoModel, setOnCheckBoxClickListener: (TodoModel) -> Unit) {
+        fun bind(
+            todoModel: TodoModel,
+            setOnCheckBoxClickListener: (TodoModel) -> Unit,
+            setOnItemClickListener: (TodoModel) -> Unit
+        ) {
 
             val context = itemView.context
 
@@ -64,6 +71,10 @@ class TodoAndDoneAdapter(private val setOnCheckBoxClickListener: (TodoModel) -> 
                 checkBox.setOnClickListener {
                     setOnCheckBoxClickListener(todoModel)
                 }
+
+                root.setOnClickListener {
+                    setOnItemClickListener(todoModel)
+                }
             }
         }
     }
@@ -72,7 +83,7 @@ class TodoAndDoneAdapter(private val setOnCheckBoxClickListener: (TodoModel) -> 
         TodoAndDoneHolder(TodoAndDoneBinding.inflate(LayoutInflater.from(parent.context)))
 
     override fun onBindViewHolder(holder: TodoAndDoneHolder, position: Int) =
-        holder.bind(getItem(position), setOnCheckBoxClickListener)
+        holder.bind(getItem(position), setOnCheckBoxClickListener, setOnItemClickListener)
 
     class DiffUtilCallback : DiffUtil.ItemCallback<TodoModel>() {
         override fun areItemsTheSame(oldItem: TodoModel, newItem: TodoModel): Boolean =

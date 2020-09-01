@@ -40,18 +40,34 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val date: MutableLiveData<String> = MutableLiveData()
     private lateinit var simpleDateFormat: SimpleDateFormat
     private var monthAndYear = ""
-
+    private lateinit var bundle: Bundle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        bundle = Bundle()
 
-        val d = arguments?.getSerializable("todoModel")
-        if (d != null) {
-            val todoModel: TodoModel = d as TodoModel
-            todoViewModel.insert(todoModel)
+        val isUpdate1 = arguments?.getInt("isUpdate1")
+        val bundle = arguments?.getSerializable("todoModel")
+        val bundle1 = arguments?.getSerializable("todoModelOld")
+
+        /**
+         * TODO room update fun dont work
+         * Remove old item add new item
+         */
+        if (bundle != null) {
+            val todoModel: TodoModel = bundle as TodoModel
+            when (isUpdate1) {
+                0 -> {
+                    todoViewModel.insert(todoModel)
+                }
+                1 -> {
+                    val todoModelOld: TodoModel = bundle1 as TodoModel
+                    todoViewModel.delete(todoModelOld)
+                    todoViewModel.insert(todoModel)
+                }
+            }
         }
-
 
         val backPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -71,15 +87,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
 
-        /**
-         * todo
-         * Year and month get calendar
-         */
         val list: ArrayList<MonthDayModel> = printDate(year, month + 1)
 
-        monthDayAdapter = MonthDayAdapter(list, setOnItemClickListener)
-        todoAdapter = TodoAndDoneAdapter(setOnCheckBoxClickListener)
-        doneAdapter = TodoAndDoneAdapter(setOnCheckBoxClickListener)
+        monthDayAdapter = MonthDayAdapter(list, setOnMonthDayItemClickListener)
+        todoAdapter =
+            TodoAndDoneAdapter(setOnCheckBoxClickListener, setOnTodoAndDoneItemClickListener)
+        doneAdapter =
+            TodoAndDoneAdapter(setOnCheckBoxClickListener, setOnTodoAndDoneItemClickListener)
 
     }
 
@@ -118,8 +132,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         /**********************************************************************************/
 
         floatingActionButton.setOnClickListener {
+            bundle.putInt("isUpdate", 0)
             NavHostFragment.findNavController(this)
-                .navigate(R.id.action_homeFragment_to_todoAddFragment)
+                .navigate(R.id.action_homeFragment_to_todoAddFragment, bundle)
         }
 
 
@@ -142,11 +157,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
 
-    private val setOnItemClickListener: (MonthDayModel) -> Unit = {
+    private val setOnMonthDayItemClickListener: (MonthDayModel) -> Unit = {
         date.value = it.date
-        /**
-         *  detailFragment
-         */
+    }
+    private val setOnTodoAndDoneItemClickListener: (TodoModel) -> Unit = {
+        bundle.putInt("isUpdate", 1)
+        bundle.putSerializable("todoModel1", it)
+        NavHostFragment.findNavController(this)
+            .navigate(R.id.action_homeFragment_to_todoAddFragment, bundle)
     }
 
     private val setOnCheckBoxClickListener: (TodoModel) -> Unit = { todoModel ->

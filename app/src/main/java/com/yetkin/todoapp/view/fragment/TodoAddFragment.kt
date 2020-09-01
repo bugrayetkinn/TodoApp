@@ -7,6 +7,7 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import com.yetkin.todoapp.R
@@ -18,6 +19,18 @@ import java.util.*
 class TodoAddFragment : Fragment(R.layout.fragment_todo_add) {
 
     private var priority = -1
+    private var isUpdate: Int? = 0
+    private lateinit var todoModel1: TodoModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val bundle = arguments?.getSerializable("todoModel1")
+        if (bundle != null) {
+            todoModel1 = bundle as TodoModel
+        }
+        isUpdate = arguments?.getInt("isUpdate", 0)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,6 +51,38 @@ class TodoAddFragment : Fragment(R.layout.fragment_todo_add) {
             NavHostFragment.findNavController(this)
                 .navigate(R.id.action_todoAddFragment_to_homeFragment)
         }
+        when (isUpdate) {
+            0 -> {
+                txtTopTitle.text = getString(R.string.add_new_task)
+                buttonSave.text = getString(R.string.save)
+            }
+            1 -> {
+                txtTopTitle.text = getString(R.string.update)
+                buttonSave.text = getString(R.string.update)
+                editTxtTitle.setText(todoModel1.title)
+                editTxtMessage.setText(todoModel1.message)
+                txtDatePicker.text = todoModel1.date
+                txtTimePicker.text = todoModel1.time
+
+                var color = 0
+
+                when (todoModel1.priority) {
+                    1 -> {
+                        priority = 1
+                        color = ContextCompat.getColor(requireContext(), R.color.colorBlue)
+                    }
+                    2 -> {
+                        priority = 2
+                        color = ContextCompat.getColor(requireContext(), R.color.colorGreen)
+                    }
+                    3 -> {
+                        priority = 3
+                        color = ContextCompat.getColor(requireContext(), R.color.colorRed)
+                    }
+                }
+                toolbar2.setBackgroundColor(color)
+            }
+        }
 
         val calendar = Calendar.getInstance()
 
@@ -56,26 +101,36 @@ class TodoAddFragment : Fragment(R.layout.fragment_todo_add) {
             when (checkedId) {
                 R.id.checkBoxBlue -> {
                     priority = 1
-                    color = resources.getColor(R.color.colorBlue)
+                    color = ContextCompat.getColor(requireContext(), R.color.colorBlue)
                 }
                 R.id.checkBoxGreen -> {
                     priority = 2
-                    color = resources.getColor(R.color.colorGreen)
+                    color = ContextCompat.getColor(requireContext(), R.color.colorGreen)
                 }
                 R.id.checkBoxRed -> {
                     priority = 3
-                    color = resources.getColor(R.color.colorRed)
+                    color = ContextCompat.getColor(requireContext(), R.color.colorRed)
                 }
             }
             toolbar2.setBackgroundColor(color)
         }
         buttonSave.setOnClickListener {
 
+            val bundle = Bundle()
             val title = editTxtTitle.text.toString()
             val message = editTxtMessage.text.toString()
             val datePicker = txtDatePicker.text.toString()
             val timePicker = txtTimePicker.text.toString()
 
+            val todoModel = TodoModel(
+                title = title,
+                message = message,
+                date = datePicker,
+                time = timePicker,
+                priority = priority
+            )
+
+            // Check Empty
             if (TextUtils.isEmpty(title)
                 || TextUtils.isEmpty(message)
                 || TextUtils.isEmpty(datePicker)
@@ -90,18 +145,44 @@ class TodoAddFragment : Fragment(R.layout.fragment_todo_add) {
                 ).show()
             } else {
 
-                val todoModel = TodoModel(
-                    title = title,
-                    message = message,
-                    date = datePicker,
-                    time = timePicker,
-                    priority = priority
-                )
+                when (isUpdate) {
 
-                val bundle = Bundle()
-                bundle.putSerializable("todoModel", todoModel)
-                NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_todoAddFragment_to_homeFragment, bundle)
+                    0 -> {
+
+                        //Save
+                        bundle.putInt("isUpdate1", 0)
+                        bundle.putSerializable("todoModel", todoModel)
+                        NavHostFragment.findNavController(this)
+                            .navigate(R.id.action_todoAddFragment_to_homeFragment, bundle)
+                    }
+                    1 -> {
+                        //Update
+
+                        /**
+                         *  todoModel == todoModel1 problem uniqe id room
+                         */
+                        if (
+                            todoModel.title == todoModel1.title
+                            && todoModel.message == todoModel1.message
+                            && todoModel.date == todoModel1.date
+                            && todoModel.time == todoModel1.time
+                            && todoModel.priority == todoModel1.priority
+                        ) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Değişiklik Yapılmadı",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            bundle.putInt("isUpdate1", 1)
+                            bundle.putSerializable("todoModelOld", todoModel1)
+                            bundle.putSerializable("todoModel", todoModel)
+                            NavHostFragment.findNavController(this)
+                                .navigate(R.id.action_todoAddFragment_to_homeFragment, bundle)
+                        }
+                    }
+                }
+
 
             }
         }
