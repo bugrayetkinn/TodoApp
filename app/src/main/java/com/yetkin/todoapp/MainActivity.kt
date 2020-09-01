@@ -107,16 +107,10 @@ class MainActivity : AppCompatActivity() {
 
             /**********************************************************************************/
 
-
             floatingActionButton.setOnClickListener {
                 startActivityForResult(Intent(this@MainActivity, TodoAddActivity::class.java), 1)
             }
         }
-
-        /**
-         * TODO
-         * change date click recycleritem(Day recycler)
-         */
 
         date.observe(this, Observer { date ->
 
@@ -138,6 +132,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun showDateDialog(calendar: Calendar, simpleDateFormat: SimpleDateFormat) {
 
+        var list: ArrayList<MonthDayModel> = ArrayList()
+
         val datePickerListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
@@ -145,7 +141,8 @@ class MainActivity : AppCompatActivity() {
 
             txtDateHome.text = simpleDateFormat.format(calendar.time)
 
-            val list = printDate(year, month + 1)
+            list.clear()
+            list = printDate(year, month + 1)
             monthDayAdapter.refreshList(list)
 
             val simpleDateFormat1 = SimpleDateFormat("dd/MM/yyyy")
@@ -160,7 +157,6 @@ class MainActivity : AppCompatActivity() {
             calendar.get(Calendar.DAY_OF_MONTH)
         ).show()
     }
-
 
     private val setOnCheckBoxClickListener: (TodoModel) -> Unit = { todoModel ->
 
@@ -240,7 +236,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     private val setOnItemClickListener: (MonthDayModel) -> Unit = {
-        Log.e("Date Item : ", it.date)
         date.value = it.date
     }
 
