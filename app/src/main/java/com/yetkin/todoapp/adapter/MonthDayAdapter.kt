@@ -65,6 +65,11 @@ class MonthDayAdapter(
         }
     }
 
-
     override fun getItemCount(): Int = list.size
+
+    fun refreshList(list: ArrayList<MonthDayModel>) {
+        this.list.clear()
+        this.list.addAll(list)
+        notifyDataSetChanged()
+    }
 }

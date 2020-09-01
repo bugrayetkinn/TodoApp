@@ -17,6 +17,7 @@ Created by : Buğra Yetkin
 Mail : bugrayetkinn@gmail.com
 
  */
+
 class TodoAndDoneAdapter(private val setOnCheckBoxClickListener: (TodoModel) -> Unit) :
     ListAdapter<TodoModel, TodoAndDoneAdapter.TodoAndDoneHolder>(DiffUtilCallback()) {
 
