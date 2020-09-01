@@ -1,41 +1,32 @@
-package com.yetkin.todoapp
+package com.yetkin.todoapp.view.fragment
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
+import com.yetkin.todoapp.R
 import com.yetkin.todoapp.data.local.TodoModel
-import com.yetkin.todoapp.databinding.ActivityTodoAddBinding
-import kotlinx.android.synthetic.main.activity_todo_add.*
+import kotlinx.android.synthetic.main.fragment_todo_add.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TodoAddActivity : AppCompatActivity() {
+class TodoAddFragment : Fragment(R.layout.fragment_todo_add) {
 
-    private val todoAddActivityBinding: ActivityTodoAddBinding by lazy {
-        ActivityTodoAddBinding.inflate(layoutInflater)
-    }
-    private var priortiy = -1
+    private var priority = -1
 
-    @SuppressLint("ResourceAsColor")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(todoAddActivityBinding.root)
-
-        setSupportActionBar(toolbar2)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        val calendar = Calendar.getInstance()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         toolbar2.setNavigationOnClickListener {
-            startActivity(Intent(this@TodoAddActivity, MainActivity::class.java))
-            finish()
+            NavHostFragment.findNavController(this)
+                .navigate(R.id.action_todoAddFragment_to_homeFragment)
         }
+
+        val calendar = Calendar.getInstance()
 
         txtDatePicker.setOnClickListener {
             showDateDialog(calendar)
@@ -51,22 +42,21 @@ class TodoAddActivity : AppCompatActivity() {
 
             when (checkedId) {
                 R.id.checkBoxBlue -> {
-                    priortiy = 1
+                    priority = 1
                     color = resources.getColor(R.color.colorBlue)
                 }
                 R.id.checkBoxGreen -> {
-                    priortiy = 2
+                    priority = 2
                     color = resources.getColor(R.color.colorGreen)
                 }
                 R.id.checkBoxRed -> {
-                    priortiy = 3
+                    priority = 3
                     color = resources.getColor(R.color.colorRed)
                 }
             }
             toolbar2.setBackgroundColor(color)
         }
         buttonSave.setOnClickListener {
-            val intent = Intent()
 
             val title = editTxtTitle.text.toString()
             val message = editTxtMessage.text.toString()
@@ -77,10 +67,14 @@ class TodoAddActivity : AppCompatActivity() {
                 || TextUtils.isEmpty(message)
                 || TextUtils.isEmpty(datePicker)
                 || TextUtils.isEmpty(timePicker)
-                || priortiy == -1
+                || priority == -1
 
             ) {
-                Toast.makeText(this, "Boş alanları doldurun lütfen !", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Boş alanları doldurun lütfen !",
+                    Toast.LENGTH_LONG
+                ).show()
             } else {
 
                 val todoModel = TodoModel(
@@ -88,13 +82,14 @@ class TodoAddActivity : AppCompatActivity() {
                     message = message,
                     date = datePicker,
                     time = timePicker,
-                    priority = priortiy
+                    priority = priority
                 )
+
                 val bundle = Bundle()
                 bundle.putSerializable("todoModel", todoModel)
-                intent.putExtra("bundle", bundle)
-                setResult(Activity.RESULT_OK, intent)
-                finish()
+                NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_todoAddFragment_to_homeFragment, bundle)
+
             }
         }
     }
@@ -112,7 +107,8 @@ class TodoAddActivity : AppCompatActivity() {
         }
 
         TimePickerDialog(
-            this,
+
+            requireContext(),
             timePickerListener,
             calendar.get(Calendar.HOUR_OF_DAY),
             calendar.get(Calendar.MINUTE),
@@ -131,7 +127,7 @@ class TodoAddActivity : AppCompatActivity() {
             txtDatePicker.text = simpleDateFormat.format(calendar.time)
         }
         DatePickerDialog(
-            this,
+            requireContext(),
             datePickerListener,
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
