@@ -92,6 +92,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             showDateDialog(calendar, simpleDateFormat)
         }
 
+        /**********************************************************************************/
+
         recyclerViewDays.setHasFixedSize(true)
         recyclerViewDays.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -99,10 +101,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         /**********************************************************************************/
 
-        val layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerViewTodo.setHasFixedSize(true)
-        recyclerViewTodo.layoutManager = layoutManager
+        recyclerViewTodo.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerViewTodo.adapter = todoAdapter
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(recyclerViewTodo)
@@ -140,6 +141,28 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     }
 
+
+    private val setOnItemClickListener: (MonthDayModel) -> Unit = {
+        date.value = it.date
+        /**
+         *  detailFragment
+         */
+    }
+
+    private val setOnCheckBoxClickListener: (TodoModel) -> Unit = { todoModel ->
+
+        var todoModelNew = todoModel.copy()
+        when (todoModel.checkDone) {
+            0 -> {
+                todoModelNew = todoModel.copy(checkDone = 1)
+            }
+            1 -> {
+                todoModelNew = todoModel.copy(checkDone = 0)
+            }
+        }
+        todoViewModel.update(todoModelNew)
+    }
+
     private fun showDateDialog(calendar: Calendar, simpleDateFormat: SimpleDateFormat) {
 
         var list: ArrayList<MonthDayModel> = ArrayList()
@@ -168,19 +191,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         ).show()
     }
 
-    private val setOnCheckBoxClickListener: (TodoModel) -> Unit = { todoModel ->
-
-        var todoModelNew = todoModel.copy()
-        when (todoModel.checkDone) {
-            0 -> {
-                todoModelNew = todoModel.copy(checkDone = 1)
-            }
-            1 -> {
-                todoModelNew = todoModel.copy(checkDone = 0)
-            }
-        }
-        todoViewModel.update(todoModelNew)
-    }
 
     private val itemTouchHelperCallback =
         object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -244,11 +254,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
 
         }
-
-    private val setOnItemClickListener: (MonthDayModel) -> Unit = {
-        date.value = it.date
-    }
-
 
     private fun printDate(year: Int, month: Int): ArrayList<MonthDayModel> {
         val calendar = Calendar.getInstance()
