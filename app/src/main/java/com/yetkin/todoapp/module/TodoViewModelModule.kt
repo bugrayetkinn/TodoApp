@@ -1,6 +1,6 @@
 package com.yetkin.todoapp.module
 
-import com.yetkin.todoapp.viewmodel.TodoViewModel
+import com.yetkin.todoapp.ui.viewmodel.TodoViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
