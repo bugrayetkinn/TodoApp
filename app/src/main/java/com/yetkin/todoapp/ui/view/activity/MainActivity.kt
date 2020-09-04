@@ -1,4 +1,4 @@
-package com.yetkin.todoapp.view.activity
+package com.yetkin.todoapp.ui.view.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

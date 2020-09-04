@@ -1,4 +1,4 @@
-package com.yetkin.todoapp.model
+package com.yetkin.todoapp.adapter.model
 
 /**
 

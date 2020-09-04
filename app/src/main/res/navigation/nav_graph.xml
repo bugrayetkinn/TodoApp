@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.yetkin.todoapp.view.fragment.HomeFragment"
+        android:name="com.yetkin.todoapp.ui.view.fragment.HomeFragment"
         android:label="HomeFragment">
         <action
             android:id="@+id/action_homeFragment_to_todoAddFragment"
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/todoAddFragment"
-        android:name="com.yetkin.todoapp.view.fragment.TodoAddFragment"
+        android:name="com.yetkin.todoapp.ui.view.fragment.TodoAddFragment"
         android:label="TodoAddFragment">
         <action
             android:id="@+id/action_todoAddFragment_to_homeFragment"

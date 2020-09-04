@@ -4,8 +4,8 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.yetkin.todoapp.adapter.model.MonthDayModel
 import com.yetkin.todoapp.databinding.DaysBinding
-import com.yetkin.todoapp.model.MonthDayModel
 import kotlinx.android.synthetic.main.days.view.*
 import java.util.*
 

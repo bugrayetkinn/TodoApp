@@ -1,4 +1,4 @@
-package com.yetkin.todoapp.repository
+package com.yetkin.todoapp.data.repository
 
 import com.yetkin.todoapp.data.local.TodoDAO
 import com.yetkin.todoapp.data.local.TodoModel

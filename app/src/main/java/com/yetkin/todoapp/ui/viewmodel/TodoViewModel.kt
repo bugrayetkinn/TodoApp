@@ -1,10 +1,10 @@
-package com.yetkin.todoapp.viewmodel
+package com.yetkin.todoapp.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yetkin.todoapp.data.local.TodoModel
-import com.yetkin.todoapp.repository.TodoRepository
+import com.yetkin.todoapp.data.repository.TodoRepository
 import kotlinx.coroutines.launch
 
 /**

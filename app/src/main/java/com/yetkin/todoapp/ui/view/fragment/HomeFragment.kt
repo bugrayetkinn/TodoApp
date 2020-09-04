@@ -1,4 +1,4 @@
-package com.yetkin.todoapp.view.fragment
+package com.yetkin.todoapp.ui.view.fragment
 
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -19,9 +19,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yetkin.todoapp.R
 import com.yetkin.todoapp.adapter.MonthDayAdapter
 import com.yetkin.todoapp.adapter.TodoAndDoneAdapter
+import com.yetkin.todoapp.adapter.model.MonthDayModel
 import com.yetkin.todoapp.data.local.TodoModel
-import com.yetkin.todoapp.model.MonthDayModel
-import com.yetkin.todoapp.viewmodel.TodoViewModel
+import com.yetkin.todoapp.ui.viewmodel.TodoViewModel
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.androidx.viewmodel.ext.android.viewModel

@@ -1,4 +1,4 @@
-package com.yetkin.todoapp.view.fragment
+package com.yetkin.todoapp.ui.view.fragment
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -149,16 +149,17 @@ class TodoAddFragment : Fragment(R.layout.fragment_todo_add) {
 
                     0 -> {
 
-                        //Save
+                        /**
+                         *  Save
+                         */
                         bundle.putInt("isUpdate1", 0)
                         bundle.putSerializable("todoModel", todoModel)
                         NavHostFragment.findNavController(this)
                             .navigate(R.id.action_todoAddFragment_to_homeFragment, bundle)
                     }
                     1 -> {
-                        //Update
-
                         /**
+                         * Update
                          *  todoModel == todoModel1 problem uniqe id room
                          */
                         if (
