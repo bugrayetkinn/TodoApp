@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -95,12 +94,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val month = calendar.get(Calendar.MONTH)
 
         val list: ArrayList<MonthDayModel> = printDate(year, month + 1)
-
         monthDayAdapter = MonthDayAdapter(list, setOnMonthDayItemClickListener)
-        todoAdapter =
-            TodoAndDoneAdapter(setOnCheckBoxClickListener, setOnTodoAndDoneItemClickListener)
-        doneAdapter =
-            TodoAndDoneAdapter(setOnCheckBoxClickListener, setOnTodoAndDoneItemClickListener)
 
     }
 
@@ -259,26 +253,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         /**********************************************************************************/
 
-        recyclerViewDays.setHasFixedSize(true)
-        recyclerViewDays.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        recyclerViewDays.adapter = monthDayAdapter
+        recyclerViewMonthDayInitialize()
 
         /**********************************************************************************/
 
-        recyclerViewTodo.setHasFixedSize(true)
-        recyclerViewTodo.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        recyclerViewTodo.adapter = todoAdapter
-        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
-        itemTouchHelper.attachToRecyclerView(recyclerViewTodo)
+        recyclerViewTodoInitialize()
 
         /**********************************************************************************/
 
-        recyclerViewDone.setHasFixedSize(true)
-        recyclerViewDone.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        recyclerViewDone.adapter = doneAdapter
+        recyclerViewDoneInitialize()
 
         /**********************************************************************************/
 
@@ -301,10 +284,38 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 doneAdapter.submitList(list)
                 txtDone.text = "DONE (${list.size})"
             })
-
         })
 
 
+    }
+
+    private fun recyclerViewMonthDayInitialize() {
+        recyclerViewDays.setHasFixedSize(true)
+        recyclerViewDays.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewDays.adapter = monthDayAdapter
+    }
+
+    private fun recyclerViewTodoInitialize() {
+        recyclerViewTodo.setHasFixedSize(true)
+        recyclerViewTodo.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        todoAdapter =
+            TodoAndDoneAdapter(setOnCheckBoxClickListener, setOnTodoAndDoneItemClickListener)
+        recyclerViewTodo.adapter = todoAdapter
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerViewTodo)
+    }
+
+    private fun recyclerViewDoneInitialize() {
+        recyclerViewDone.setHasFixedSize(true)
+        recyclerViewDone.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        doneAdapter =
+            TodoAndDoneAdapter(setOnCheckBoxClickListener, setOnTodoAndDoneItemClickListener)
+        recyclerViewDone.adapter = doneAdapter
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback1)
+        itemTouchHelper.attachToRecyclerView(recyclerViewDone)
     }
 
 
@@ -373,9 +384,70 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-                Log.e("OnSwiped : ", "HERE")
                 val position = viewHolder.adapterPosition
                 val todoModel = todoAdapter.removeItem(position)
+                homeViewModel.delete(todoModel)
+            }
+
+            override fun onChildDraw(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
+
+                RecyclerViewSwipeDecorator.Builder(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
+                    .addSwipeLeftBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.colorPink
+                        )
+                    )
+                    .addSwipeLeftActionIcon(R.drawable.delete)
+                    .addSwipeLeftLabel("Delete")
+                    .setSwipeLeftLabelColor(Color.WHITE)
+                    .create()
+                    .decorate()
+
+
+                super.onChildDraw(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
+            }
+
+        }
+
+    private val itemTouchHelperCallback1 =
+        object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+                val position = viewHolder.adapterPosition
+                val todoModel = doneAdapter.removeItem(position)
                 homeViewModel.delete(todoModel)
             }
 
