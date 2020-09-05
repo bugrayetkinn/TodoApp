@@ -8,4 +8,14 @@
     <string name="time">Time</string>
     <string name="save">Save</string>
     <string name="priority">Priority</string>
+    <string name="pwAndMinCharacter">New Password<i><font fgcolor='#ff3d00'>\nmin.6 character!</font></i></string>
+    <string name="new_password">new password</string>
+    <string name="open">Open</string>
+    <string name="password">password</string>
+    <string name="reset_password">reset password ?</string>
+    <string name="cancel">cancel</string>
+    <string name="old_password">old password</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="private_">Private</string>
 </resources>

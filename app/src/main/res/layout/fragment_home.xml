@@ -47,6 +47,14 @@
 
                 </LinearLayout>
 
+                <ImageView
+                    android:id="@+id/imgPrivate"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="end"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/lock" />
+
 
             </androidx.appcompat.widget.Toolbar>
 

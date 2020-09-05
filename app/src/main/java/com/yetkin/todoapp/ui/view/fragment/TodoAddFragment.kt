@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import com.yetkin.todoapp.R
-import com.yetkin.todoapp.data.local.TodoModel
+import com.yetkin.todoapp.data.local.todo.TodoModel
 import kotlinx.android.synthetic.main.fragment_todo_add.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,6 +20,7 @@ class TodoAddFragment : Fragment(R.layout.fragment_todo_add) {
 
     private var priority = -1
     private var isUpdate: Int? = 0
+    private var isPrivate = -1
     private lateinit var todoModel1: TodoModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +64,10 @@ class TodoAddFragment : Fragment(R.layout.fragment_todo_add) {
                 editTxtMessage.setText(todoModel1.message)
                 txtDatePicker.text = todoModel1.date
                 txtTimePicker.text = todoModel1.time
+                when (todoModel1.checkPrivate) {
+                    0 -> checkBoxPrivate.isChecked = false
+                    1 -> checkBoxPrivate.isChecked = true
+                }
 
                 var color = 0
 
@@ -114,6 +119,21 @@ class TodoAddFragment : Fragment(R.layout.fragment_todo_add) {
             }
             toolbar2.setBackgroundColor(color)
         }
+
+        isPrivate = if (checkBoxPrivate.isChecked) {
+            1
+
+        } else {
+            0
+        }
+        checkBoxPrivate.setOnCheckedChangeListener { _, isChecked ->
+
+            isPrivate = if (isChecked) {
+                1
+            } else {
+                0
+            }
+        }
         buttonSave.setOnClickListener {
 
             val bundle = Bundle()
@@ -127,7 +147,8 @@ class TodoAddFragment : Fragment(R.layout.fragment_todo_add) {
                 message = message,
                 date = datePicker,
                 time = timePicker,
-                priority = priority
+                priority = priority,
+                checkPrivate = isPrivate
             )
 
             // Check Empty
@@ -136,6 +157,7 @@ class TodoAddFragment : Fragment(R.layout.fragment_todo_add) {
                 || TextUtils.isEmpty(datePicker)
                 || TextUtils.isEmpty(timePicker)
                 || priority == -1
+                || isPrivate == -1
 
             ) {
                 Toast.makeText(
@@ -168,6 +190,7 @@ class TodoAddFragment : Fragment(R.layout.fragment_todo_add) {
                             && todoModel.date == todoModel1.date
                             && todoModel.time == todoModel1.time
                             && todoModel.priority == todoModel1.priority
+                            && todoModel.checkPrivate == todoModel1.checkPrivate
                         ) {
                             Toast.makeText(
                                 requireContext(),

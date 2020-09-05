@@ -1,12 +1,14 @@
 package com.yetkin.todoapp.ui.view.fragment
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,13 +18,18 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.yetkin.todoapp.MyAlertDialog
 import com.yetkin.todoapp.R
 import com.yetkin.todoapp.adapter.MonthDayAdapter
 import com.yetkin.todoapp.adapter.TodoAndDoneAdapter
 import com.yetkin.todoapp.adapter.model.MonthDayModel
-import com.yetkin.todoapp.data.local.TodoModel
-import com.yetkin.todoapp.ui.viewmodel.TodoViewModel
+import com.yetkin.todoapp.data.local.todo.TodoModel
+import com.yetkin.todoapp.data.local.user.UserModel
+import com.yetkin.todoapp.databinding.FirstPasswordDialogBinding
+import com.yetkin.todoapp.databinding.SeconPasswordDialogBinding
+import com.yetkin.todoapp.ui.viewmodel.HomeViewModel
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
+import kotlinx.android.synthetic.main.first_password_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
@@ -32,7 +39,7 @@ import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
-    private val todoViewModel: TodoViewModel by viewModel()
+    private val homeViewModel: HomeViewModel by viewModel()
     private lateinit var monthDayAdapter: MonthDayAdapter
     private lateinit var todoAdapter: TodoAndDoneAdapter
     private lateinit var doneAdapter: TodoAndDoneAdapter
@@ -59,12 +66,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             val todoModel: TodoModel = bundle as TodoModel
             when (isUpdate1) {
                 0 -> {
-                    todoViewModel.insert(todoModel)
+                    homeViewModel.insert(todoModel)
                 }
                 1 -> {
                     val todoModelOld: TodoModel = bundle1 as TodoModel
-                    todoViewModel.delete(todoModelOld)
-                    todoViewModel.insert(todoModel)
+                    homeViewModel.delete(todoModelOld)
+                    homeViewModel.insert(todoModel)
                 }
             }
         }
@@ -106,6 +113,150 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             showDateDialog(calendar, simpleDateFormat)
         }
 
+        /**
+         * Private password
+         */
+
+        imgPrivate.setOnClickListener {
+
+            var dialogView: View? = null
+
+            val preferences =
+                requireContext().getSharedPreferences("passwordStatus", Context.MODE_PRIVATE)
+            val pwStatus = preferences.getInt("pwStatus", 0)
+            val editPreferences = preferences.edit()
+            val myAlertDialog = MyAlertDialog(requireContext())
+
+            when (pwStatus) {
+                0 -> {
+
+                    myAlertDialog.alertDialog.setTitle(R.string.pwAndMinCharacter)
+                    myAlertDialog.alertDialog.setIcon(R.drawable.password)
+
+                    val firstPasswordDialogBinding =
+                        FirstPasswordDialogBinding.inflate(layoutInflater)
+                    dialogView = firstPasswordDialogBinding.root
+
+                    dialogView.apply {
+
+                        btnFirstPwSave.setOnClickListener {
+
+                            val pw1 = editTxtPw1.text.toString()
+                            val pw2 = editTxtPw2.text.toString()
+
+                            if (pw1.isNotEmpty() && pw2.isNotEmpty() && pw1.length >= 6 && pw2.length >= 6 && pw1 == pw2) {
+                                Toast.makeText(requireContext(), "Succes", Toast.LENGTH_SHORT)
+                                    .show()
+                                homeViewModel.insertUser(UserModel(userPassword = pw1))
+                                editPreferences.putInt("pwStatus", 1).apply()
+
+                            } else {
+                                Toast.makeText(requireContext(), "Fail", Toast.LENGTH_SHORT).show()
+                            }
+                            myAlertDialog.alertDialog.dismiss()
+                        }
+
+                        btnFirstPwCancel.setOnClickListener {
+                            myAlertDialog.alertDialog.dismiss()
+                        }
+                    }
+                }
+                1 -> {
+
+                    val secondPasswordDialogBinding =
+                        SeconPasswordDialogBinding.inflate(layoutInflater)
+                    dialogView = secondPasswordDialogBinding.root
+
+                    secondPasswordDialogBinding.apply {
+
+                        btnSecondPwOpen.setOnClickListener {
+                            val password = editTxtSecondPw.text.toString()
+
+                            if (password.isNotEmpty()) {
+                                val passwordStatus = homeViewModel.passwordControl(password)
+                                if (passwordStatus) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Succes Password",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    myAlertDialog.alertDialog.dismiss()
+                                    /**
+                                     * password true private fragment open
+                                     */
+                                    NavHostFragment.findNavController(this@HomeFragment)
+                                        .navigate(R.id.action_homeFragment_to_privateFragment)
+
+
+                                } else {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Fail Password",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        }
+
+                        btnSecondPwClose.setOnClickListener {
+                            myAlertDialog.alertDialog.dismiss()
+                        }
+
+                        txtResetPw.setOnClickListener {
+                            Toast.makeText(requireContext(), "Reset?", Toast.LENGTH_SHORT).show()
+                            myAlertDialog.alertDialog.dismiss()
+
+                            val firstPasswordDialogBinding =
+                                FirstPasswordDialogBinding.inflate(layoutInflater)
+                            val dialogView2 = firstPasswordDialogBinding.root
+
+                            val myAlertDialog2 = MyAlertDialog(requireContext())
+
+                            myAlertDialog2.createDialog(dialogView2)
+
+                            dialogView2.apply {
+
+                                editTxtPw1.hint = "reset password"
+                                editTxtPw2.hint = "reset password"
+                                editTxtPwOld.visibility = View.VISIBLE
+
+                                btnFirstPwSave.setOnClickListener {
+
+                                    val pwOld = editTxtPwOld.text.toString()
+                                    val pw1 = editTxtPw1.text.toString()
+                                    val pw2 = editTxtPw2.text.toString()
+
+                                    val oldPwControl = homeViewModel.passwordControl(pwOld)
+
+                                    if (oldPwControl && pwOld.isNotEmpty() && pw1.isNotEmpty() && pw2.isNotEmpty() && pw1.length >= 6 && pw2.length >= 6 && pw1 == pw2) {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Succes",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
+                                        homeViewModel.deletePassword(pwOld)
+                                        homeViewModel.insertUser(UserModel(userPassword = pw1))
+                                        editPreferences.putInt("pwStatus", 1).apply()
+                                        myAlertDialog2.alertDialog.dismiss()
+                                    } else {
+                                        Toast.makeText(requireContext(), "Fail", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                }
+
+                                btnFirstPwCancel.setOnClickListener {
+                                    myAlertDialog2.alertDialog.dismiss()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            dialogView?.let { it1 -> myAlertDialog.createDialog(it1) }
+        }
+
         /**********************************************************************************/
 
         recyclerViewDays.setHasFixedSize(true)
@@ -140,13 +291,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         date.observe(viewLifecycleOwner, Observer { date ->
 
-            todoViewModel.getTodo(date).observe(viewLifecycleOwner, Observer { list ->
+            homeViewModel.getTodo(date).observe(viewLifecycleOwner, Observer { list ->
 
                 todoAdapter.submitList(list)
                 txtTodo.text = "TO DO (${list.size})"
             })
 
-            todoViewModel.getDone(date).observe(viewLifecycleOwner, Observer { list ->
+            homeViewModel.getDone(date).observe(viewLifecycleOwner, Observer { list ->
                 doneAdapter.submitList(list)
                 txtDone.text = "DONE (${list.size})"
             })
@@ -178,7 +329,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 todoModelNew = todoModel.copy(checkDone = 0)
             }
         }
-        todoViewModel.update(todoModelNew)
+        homeViewModel.update(todoModelNew)
     }
 
     private fun showDateDialog(calendar: Calendar, simpleDateFormat: SimpleDateFormat) {
@@ -225,7 +376,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 Log.e("OnSwiped : ", "HERE")
                 val position = viewHolder.adapterPosition
                 val todoModel = todoAdapter.removeItem(position)
-                todoViewModel.delete(todoModel)
+                homeViewModel.delete(todoModel)
             }
 
             override fun onChildDraw(

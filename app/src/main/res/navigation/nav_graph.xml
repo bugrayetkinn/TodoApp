@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
 
@@ -11,6 +12,11 @@
         <action
             android:id="@+id/action_homeFragment_to_todoAddFragment"
             app:destination="@id/todoAddFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_homeFragment_to_privateFragment"
+            app:destination="@id/privateFragment"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_out_left" />
     </fragment>
@@ -25,5 +31,26 @@
             app:exitAnim="@anim/slide_out_right"
             app:popUpTo="@id/todoAddFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_todoAddFragment_to_privateFragment"
+            app:destination="@id/privateFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/privateFragment"
+        android:name="com.yetkin.todoapp.ui.view.fragment.PrivateFragment"
+        android:label="fragment_private"
+        tools:layout="@layout/fragment_private">
+        <action
+            android:id="@+id/action_privateFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_privateFragment_to_todoAddFragment"
+            app:destination="@id/todoAddFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left" />
     </fragment>
 </navigation>

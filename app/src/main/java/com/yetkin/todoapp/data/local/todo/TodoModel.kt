@@ -1,4 +1,4 @@
-package com.yetkin.todoapp.data.local
+package com.yetkin.todoapp.data.local.todo
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -28,5 +28,7 @@ data class TodoModel(
     @ColumnInfo(name = "todo_priority")
     val priority: Int,
     @ColumnInfo(name = "todo_checkDone")
-    val checkDone: Int = 0
+    val checkDone: Int = 0,
+    @ColumnInfo(name = "todo_checkPrivate")
+    val checkPrivate: Int = 0
 ) : Serializable

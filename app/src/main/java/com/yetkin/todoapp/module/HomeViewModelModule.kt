@@ -1,6 +1,6 @@
 package com.yetkin.todoapp.module
 
-import com.yetkin.todoapp.ui.viewmodel.TodoViewModel
+import com.yetkin.todoapp.ui.viewmodel.HomeViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -13,6 +13,6 @@ Mail : bugrayetkinn@gmail.com
 
  */
 
-val todoViewModelModule = module {
-    viewModel { TodoViewModel(get()) }
+val homeViewModelModule = module {
+    viewModel { HomeViewModel(get(), get()) }
 }

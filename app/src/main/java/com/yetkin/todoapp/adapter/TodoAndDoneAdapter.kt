@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yetkin.todoapp.R
-import com.yetkin.todoapp.data.local.TodoModel
+import com.yetkin.todoapp.data.local.todo.TodoModel
 import com.yetkin.todoapp.databinding.TodoAndDoneBinding
 
 /**

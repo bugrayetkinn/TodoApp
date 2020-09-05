@@ -1,9 +1,10 @@
 package com.yetkin
 
 import android.app.Application
+import com.yetkin.todoapp.module.homeViewModelModule
 import com.yetkin.todoapp.module.roomModule
 import com.yetkin.todoapp.module.todoRepositoryModule
-import com.yetkin.todoapp.module.todoViewModelModule
+import com.yetkin.todoapp.module.userRepositoryModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -25,7 +26,8 @@ class App : Application() {
             modules(
                 roomModule,
                 todoRepositoryModule,
-                todoViewModelModule
+                homeViewModelModule,
+                userRepositoryModule
             )
         }
     }

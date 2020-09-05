@@ -36,35 +36,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
 
-    <TextView
-        android:id="@+id/txtMessage"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:text="@string/message"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
-
-    <TextView
-        android:id="@+id/txtDate"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="40dp"
-        android:text="@string/date"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTxtMessage" />
-
-    <TextView
-        android:id="@+id/txtTime"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="40dp"
-        android:text="@string/time"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtDate" />
 
     <EditText
         android:id="@+id/editTxtTitle"
@@ -81,6 +52,16 @@
         app:layout_constraintStart_toEndOf="@+id/txtTitle"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
 
+    <TextView
+        android:id="@+id/txtMessage"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:text="@string/message"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+
     <EditText
         android:id="@+id/editTxtMessage"
         android:layout_width="0dp"
@@ -96,29 +77,16 @@
         app:layout_constraintStart_toEndOf="@+id/txtMessage"
         app:layout_constraintTop_toBottomOf="@+id/editTxtTitle" />
 
-    <Button
-        android:id="@+id/buttonSave"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/custom_button"
-        android:text="@string/save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/radioGroupCheckbox" />
 
     <TextView
-        android:id="@+id/txtPriority"
+        android:id="@+id/txtDate"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="40dp"
-        android:text="@string/priority"
+        android:text="@string/date"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTime" />
+        app:layout_constraintTop_toBottomOf="@+id/editTxtMessage" />
 
     <TextView
         android:id="@+id/txtDatePicker"
@@ -131,6 +99,26 @@
         app:layout_constraintStart_toEndOf="@+id/txtDate"
         app:layout_constraintTop_toBottomOf="@+id/editTxtMessage" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="130dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTxtMessage"
+        app:srcCompat="@drawable/calendar" />
+
+    <TextView
+        android:id="@+id/txtTime"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtDate" />
+
     <TextView
         android:id="@+id/txtTimePicker"
         android:layout_width="0dp"
@@ -142,6 +130,27 @@
         app:layout_constraintStart_toEndOf="@+id/txtTime"
         app:layout_constraintTop_toBottomOf="@+id/txtDatePicker" />
 
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="130dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:srcCompat="@drawable/clock" />
+
+
+    <TextView
+        android:id="@+id/txtPriority"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/priority"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTime" />
 
     <RadioGroup
         android:id="@+id/radioGroupCheckbox"
@@ -179,24 +188,37 @@
 
     </RadioGroup>
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="130dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTxtMessage"
-        app:srcCompat="@drawable/calendar" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        android:text="Private"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtPriority" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="130dp"
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/custom_button"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:srcCompat="@drawable/clock" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/radioGroupCheckbox" />
+
+    <CheckBox
+        android:id="@+id/checkBoxPrivate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupCheckbox" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

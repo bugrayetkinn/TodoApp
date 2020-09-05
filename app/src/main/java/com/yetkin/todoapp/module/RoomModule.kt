@@ -1,7 +1,7 @@
 package com.yetkin.todoapp.module
 
 import androidx.room.Room
-import com.yetkin.todoapp.data.local.TodoDatabase
+import com.yetkin.todoapp.data.local.RoomDatabase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -17,8 +17,9 @@ Mail : bugrayetkinn@gmail.com
 val roomModule = module {
 
     single {
-        Room.databaseBuilder(androidContext(), TodoDatabase::class.java, "tododatabase")
+        Room.databaseBuilder(androidContext(), RoomDatabase::class.java, "tododatabase")
             .allowMainThreadQueries().build()
     }
-    single { get<TodoDatabase>().todoDAO() }
+    single { get<RoomDatabase>().todoDAO() }
+    single { get<RoomDatabase>().userDAO() }
 }
