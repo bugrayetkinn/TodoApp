@@ -20,4 +20,5 @@
 <li><a href="https://developer.android.com/jetpack/guide">MVVM</a></li>
 <li><a href="https://insert-koin.io">Koin</a></li>
 
-
+## Design
+Inspired by [Eliezer Pujols](https://www.uplabs.com/posts/to-do-list-app-concept)
