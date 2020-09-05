@@ -8,6 +8,4 @@
   <img height= "200" src="https://www.linkpicture.com/q/screenshot_3_1.png"/>
   <img height= "200" src="https://www.linkpicture.com/q/screenshot_4_1.png"/>
   <img height= "200" src="https://www.linkpicture.com/q/screenshot_5_1.png"/>
-  <img height= "200" src="https://ibb.co/2cHtxYK"/>
-  <img height= "200" src="https://www.linkpicture.com/q/screenshot_7_1.png"/>
 </p>
