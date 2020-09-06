@@ -198,9 +198,11 @@ class TodoAddFragment : Fragment(R.layout.fragment_todo_add) {
                                 Toast.LENGTH_LONG
                             ).show()
                         } else {
+
+                            val todoModelUpdate = todoModel.copy(checkDone = 1)
                             bundle.putInt("isUpdate1", 1)
                             bundle.putSerializable("todoModelOld", todoModel1)
-                            bundle.putSerializable("todoModel", todoModel)
+                            bundle.putSerializable("todoModel", todoModelUpdate)
                             NavHostFragment.findNavController(this)
                                 .navigate(R.id.action_todoAddFragment_to_homeFragment, bundle)
                         }
